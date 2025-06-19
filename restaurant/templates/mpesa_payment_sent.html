@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container text-center py-5">
+  <h2 class="text-success">📱 Payment Request Sent</h2>
+  <p>{{ message }}</p>
+
+  <div class="mt-4">
+    <h5>Order #{{ order.id }}</h5>
+    <p>Total Amount: <strong>KSh {{ order.total_price }}</strong></p>
+    <p>Please complete the payment on your M-Pesa phone.</p>
+  </div>
+
+  <a href="{% url 'home' %}" class="btn btn-primary mt-4">Back to Home</a>
+</div>
+{% endblock %}

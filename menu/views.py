@@ -245,7 +245,11 @@ def lipa_na_mpesa_online(request, order_id):
 
     print("STK Push Response:", response.status_code, response.text)
 
-    return JsonResponse(response.json(), status=response.status_code)
+    return render(request, 'mpesa_payment_sent.html', {
+    'order': order,
+    'message': 'A payment request has been sent to your M-Pesa. Please complete it to confirm your order.'
+})
+
 
 @login_required
 def update_cart_quantity(request, item_id):
