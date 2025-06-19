@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5 fw-bold display-5 text-dark">Our Menu</h2>
+    <div class="row">
+      {% for item in menu_items %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 border-0 shadow rounded-4 overflow-hidden">
+          {% if item.image %}
+          <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title fw-semibold text-primary">{{ item.name }}</h5>
+            <p class="card-text text-muted small">{{ item.description }}</p>
+            <p class="card-text fw-semibold">KSh {{ item.price }}</p>
+            <form method="post" action="{% url 'add_to_cart' item.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success w-100 rounded-pill">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center text-muted">No menu items available at the moment. Please check back later.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+

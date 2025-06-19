@@ -1,0 +1,97 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<!-- Book Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col text-center">
+        <h2 class="fw-bold">Reserve Your Table</h2>
+        <p class="text-muted">Quick and easy reservations for your perfect dining experience.</p>
+      </div>
+    </div>
+
+    {% if messages %}
+      <div class="row mb-3">
+        <div class="col">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row g-4">
+      <!-- Reservation Form -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <form action="{% url 'book_table' %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="e.g., Brian Kimita" required />
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" name="phone" id="phone" class="form-control" placeholder="+254712345678" required />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required />
+              </div>
+              <div class="mb-3">
+                <label for="guests" class="form-label">Number of Guests</label>
+                <select name="guests" id="guests" class="form-select" required>
+                  <option value="" disabled selected>Select guests</option>
+                  {% for i in "2345"|make_list %}
+                  <option value="{{ i }}">{{ i }} Guests</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" name="date" id="date" class="form-control" required min="{{ today|date:'Y-m-d' }}" />
+              </div>
+              <div class="mb-3">
+                <label for="time" class="form-label">Time</label>
+                <input type="time" name="time" id="time" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="message" class="form-label">Special Requests</label>
+                <textarea name="message" id="message" class="form-control" rows="3" placeholder="Birthday, allergies, etc."></textarea>
+              </div>
+              <div class="text-end">
+                <button type="submit" class="btn btn-primary w-100">Reserve Table</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <div class="col-md-6">
+        <div id="map" class="shadow-sm rounded" style="height: 500px; width: 100%;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  var map = L.map('map').setView([-1.286389, 36.817223], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  L.marker([-1.286389, 36.817223]).addTo(map)
+    .bindPopup('Feane Restaurant<br>Nairobi, Kenya')
+    .openPopup();
+</script>
+
+{% endblock %}
+

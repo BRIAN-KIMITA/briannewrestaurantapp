@@ -1,0 +1,108 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-5 text-center display-6">🛒 Your Cart</h2>
+
+  {% if items %}
+  <div class="table-responsive mb-4">
+    <table class="table align-middle shadow-sm">
+      <thead class="table-dark">
+        <tr>
+          <th>Item</th>
+          <th>Image</th>
+          <th style="width: 200px;">Quantity</th>
+          <th class="text-end">Subtotal & Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in items %}
+        <tr>
+          <td class="fw-semibold">{{ entry.item.name }}</td>
+          <td>
+            {% if entry.item.image %}
+              <img src="{{ entry.item.image.url }}" alt="{{ entry.item.name }}" class="img-thumbnail" style="width: 70px; height: 70px; object-fit: cover;">
+            {% else %}
+              <span class="text-muted">No image</span>
+            {% endif %}
+          </td>
+          <td>
+            <form method="POST" action="{% url 'update_cart_quantity' entry.item.id %}" class="cart-update-form d-flex justify-content-center align-items-center gap-2" data-item-id="{{ entry.item.id }}">
+              {% csrf_token %}
+              <input type="number" name="quantity" value="{{ entry.quantity }}" min="1" class="form-control quantity-input text-center" style="width: 80px;">
+              <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+            </form>
+          </td>
+          <td class="text-end">
+            <span class="fw-semibold">KSh {{ entry.subtotal|floatformat:2 }}</span>
+            <a href="{% url 'remove_from_cart' entry.item.id %}" class="btn btn-sm btn-outline-danger ms-3">Remove</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Total Section -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 class="fw-bold">Total: <span class="text-success">KSh {{ total|floatformat:2 }}</span></h4>
+    <a href="{% url 'checkout' %}" class="btn btn-lg btn-success">Proceed to Checkout</a>
+  </div>
+
+  {% else %}
+  <div class="alert alert-info text-center shadow-sm py-5">
+    <h4 class="mb-3">🛍️ Your cart is empty</h4>
+    <a href="{% url 'menu' %}" class="btn btn-outline-success btn-lg">Browse Menu</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.querySelectorAll('.cart-update-form').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const itemId = form.getAttribute('data-item-id');
+      const quantity = form.querySelector('.quantity-input').value;
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      const response = await fetch(`/menu/cart/update/${itemId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': csrfToken
+        },
+        body: `quantity=${quantity}`
+      });
+
+      if (response.ok) {
+        const toast = new bootstrap.Toast(document.getElementById('cartToast'));
+        toast.show();
+        setTimeout(() => location.reload(), 2000);
+      } else {
+        alert("Failed to update item. Try again.");
+      }
+    });
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('bg-dark', 'text-white');
+  }
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('bg-dark');
+    document.body.classList.toggle('text-white');
+    localStorage.setItem('theme', document.body.classList.contains('bg-dark') ? 'dark' : 'light');
+  });
+</script>
+{% endblock %}
+
+
+
+
+

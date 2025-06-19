@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<!-- About Section -->
+<section class="bg-light">
+  <div class="container py-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="img-box">
+          <img src="{% static 'images/about-img.png' %}" alt="About Feane" class="img-fluid rounded shadow-sm">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-box">
+          <h2 class="fw-bold mb-3">Welcome to Feane</h2>
+          <p class="text-muted mb-2">
+            At Feane, we're passionate about delivering delicious meals made from the freshest ingredients. Whether you're dining in, taking out, or ordering online, our goal is to provide an exceptional food experience every time.
+          </p>
+          <p class="text-muted mb-3">
+            Our chefs craft every meal with love, bringing a perfect blend of flavor, culture, and creativity to your plate. Come discover why Feane is more than just food — it’s a lifestyle.
+          </p>
+          <a href="{% url 'menu' %}" class="btn btn-outline-primary">Explore Our Menu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+

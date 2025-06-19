@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}Home - Feane{% endblock %}
+
+{% block slider %}
+<section class="slider_section">
+  <div id="customCarousel1" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <div class="container py-5">
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <div class="detail-box">
+                <h1 class="display-5 fw-bold">Fast Food Restaurant</h1>
+                <p class="lead">Enjoy delicious, freshly prepared meals delivered right to your doorstep. Quick, tasty, and satisfying every time.</p>
+                <a href="{% url 'menu' %}" class="btn btn-primary btn-lg mt-3">Order Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="container py-5">
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <div class="detail-box">
+                <h1 class="display-5 fw-bold">Fresh Ingredients Daily</h1>
+                <p class="lead">We use only the highest quality ingredients to craft meals that are both flavorful and healthy.</p>
+                <a href="{% url 'menu' %}" class="btn btn-primary btn-lg mt-3">Order Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="container py-5">
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <div class="detail-box">
+                <h1 class="display-5 fw-bold">Quick and Easy Booking</h1>
+                <p class="lead">Reserve your table in just a few clicks. Perfect for birthdays, meetings, or casual dining with friends.</p>
+                <a href="{% url 'book_table' %}" class="btn btn-primary btn-lg mt-3">Book Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ol class="carousel-indicators">
+      <li data-bs-target="#customCarousel1" data-bs-slide-to="0" class="active"></li>
+      <li data-bs-target="#customCarousel1" data-bs-slide-to="1"></li>
+      <li data-bs-target="#customCarousel1" data-bs-slide-to="2"></li>
+    </ol>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<!-- Special Offers -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">🔥 Today's Special Offers</h2>
+    <div class="row g-4">
+      {% for offer in '1234'|make_list %}
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm border-0">
+          <img src="{% static 'images/o' %}{{ forloop.counter }}.jpg" class="card-img-top" alt="Offer">
+          <div class="card-body text-center">
+            <h5 class="card-title">Offer {{ forloop.counter }}</h5>
+            <p class="text-danger fw-semibold">{{ 10|add:forloop.counter|stringformat:'d' }}% Off</p>
+            <a href="{% url 'checkout' %}" class="btn btn-outline-primary btn-sm">Order Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="client_section py-5 bg-white">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">💬 What Our Customers Say</h2>
+    </div>
+    <div class="row">
+      <div class="owl-carousel client_owl-carousel">
+
+        <div class="item">
+          <div class="card border-0 shadow text-center p-4">
+            <img src="{% static 'images/jane.jpg' %}" alt="Jane Mwangi" class="rounded-circle mb-3 mx-auto" width="80">
+            <p class="mb-2">The food at Feane is absolutely delicious! I love how fresh everything tastes and the service is always top-notch. Highly recommend the grilled chicken and passion juice!</p>
+            <h6 class="fw-bold mb-0">Jane Mwangi</h6>
+            <small class="text-muted">Nairobi, Kenya</small>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="card border-0 shadow text-center p-4">
+            <img src="{% static 'images/kevo.jpg' %}" alt="Kevin Otieno" class="rounded-circle mb-3 mx-auto" width="80">
+            <p class="mb-2">I always order from Feane when I’m working late. Their food is consistently good, warm, and delivered fast. Plus, the packaging is so neat and eco-friendly!</p>
+            <h6 class="fw-bold mb-0">Kevin Otieno</h6>
+            <small class="text-muted">Westlands, Nairobi</small>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="card border-0 shadow text-center p-4">
+            <img src="{% static 'images/maryachieng.jpg' %}" alt="Mercy Achieng" class="rounded-circle mb-3 mx-auto" width="80">
+            <p class="mb-2">From the ambiance to the food, Feane always exceeds my expectations. It's my go-to restaurant when meeting up with friends or having a family lunch.</p>
+            <h6 class="fw-bold mb-0">Mercy Achieng</h6>
+            <small class="text-muted">Ruiru, Kenya</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+

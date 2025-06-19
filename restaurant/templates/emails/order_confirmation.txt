@@ -1,0 +1,23 @@
+Hello {{ order.customer_name }},
+
+Thank you for your order from Feane Restaurant!
+
+Order ID: {{ order.id }}
+Date: {{ order.ordered_at|date:"Y-m-d H:i" }}
+
+Items Ordered:
+{% for item in items %}
+- {{ item.quantity }} x {{ item.item.name }} (Ksh {{ item.subtotal|floatformat:2 }})
+{% endfor %}
+
+Total Amount: Ksh {{ total|floatformat:2 }}
+
+Delivery Address:
+{{ order.address }}
+
+Notes:
+{{ order.notes }}
+
+We appreciate your business and will deliver your order shortly.
+
+Feane Restaurant

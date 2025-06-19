@@ -1,0 +1,104 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="order_section layout_padding">
+  <div class="container">
+    <!-- Flash Message -->
+    {% if messages %}
+      <div class="alert alert-success">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="heading_container heading_center">
+      <h2>Order Now</h2>
+      <p>Fill in your details to place an order</p>
+    </div>
+
+    <div class="row">
+      <!-- Item Summary -->
+      <div class="col-md-5">
+        <div class="order_item_card">
+          <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid rounded mb-3">
+          <h4>{{ item.name }}</h4>
+          <p class="text-muted">Unit Price: Ksh {{ item.price }}</p>
+          <p class="text-muted">Total (est.): <span id="total_price">Ksh {{ item.price }}</span></p>
+        </div>
+      </div>
+
+      <!-- Order Form -->
+      <div class="col-md-7">
+        <form action="" method="POST" class="order_form">
+          {% csrf_token %}
+
+          
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" class="form-control" required placeholder="you@example.com">
+          </div>
+     
+
+          <div class="form-group">
+            <label for="name">Your Full Name</label>
+            <input type="text" name="name" id="name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" name="phone" id="phone" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Delivery Address</label>
+            <textarea name="address" id="address" class="form-control" rows="3" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Special Instructions</label>
+            <textarea name="notes" id="notes" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-warning px-4 py-2">Place Order</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const quantityInput = document.getElementById('quantity');
+    const totalDisplay = document.getElementById('total_price');
+    const price = parseFloat("{{ item.price|floatformat:2 }}"); // safely inject Django variable
+
+    quantityInput.addEventListener('input', function() {
+      const qty = parseInt(this.value) || 1;
+      totalDisplay.textContent = "Ksh " + (qty * price).toFixed(2); // format to 2 decimal places
+    });
+  });
+</script>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

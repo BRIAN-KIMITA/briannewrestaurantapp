@@ -1,0 +1,81 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-5 fw-bold">🧾 Checkout</h2>
+
+  <div class="row g-4">
+    <!-- Order Form -->
+    <div class="col-lg-7">
+      <form method="post" class="card shadow-sm border-0 p-4 bg-white">
+        {% csrf_token %}
+
+        <h4 class="mb-4 fw-semibold">Customer Information</h4>
+
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" name="name" id="name" class="form-control" placeholder="e.g. Brian Kimita" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input type="text" name="phone" id="phone" class="form-control" placeholder="07..." required>
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Delivery Address</label>
+          <textarea name="address" id="address" class="form-control" rows="2" placeholder="Street, Estate, House No." required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="notes" class="form-label">Additional Notes (Optional)</label>
+          <textarea name="notes" id="notes" class="form-control" rows="2" placeholder="e.g., call before delivery, allergic to nuts"></textarea>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-success btn-lg w-100">Place Order</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 p-4 bg-white">
+        <h4 class="mb-4 fw-semibold">🛍️ Order Summary</h4>
+        <ul class="list-group list-group-flush mb-3">
+          {% for entry in items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>{{ entry.quantity }} x {{ entry.item.name }}</span>
+              <span>KSh {{ entry.subtotal|floatformat:2 }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        <div class="d-flex justify-content-between fw-bold fs-5 mb-3">
+          <span>Total:</span>
+          <span>KSh {{ total|floatformat:2 }}</span>
+        </div>
+
+        {% if enable_mpesa %}
+        <form method="post" action="">
+          {% csrf_token %}
+          <input type="hidden" name="name" value="{{ request.POST.name }}">
+          <input type="hidden" name="email" value="{{ request.POST.email }}">
+          <input type="hidden" name="phone" value="{{ request.POST.phone }}">
+          <input type="hidden" name="address" value="{{ request.POST.address }}">
+          <input type="hidden" name="notes" value="{{ request.POST.notes }}">
+          <input type="hidden" name="amount" value="{{ total|floatformat:0 }}">
+
+          <button type="submit" class="btn btn-warning w-100">Pay via M-Pesa</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
